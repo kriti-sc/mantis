@@ -48,6 +48,7 @@ public class HighAvailabilityServicesUtil {
   public static HighAvailabilityServices createHAServices(CoreConfiguration configuration) {
     if (configuration.isLocalMode()) {
       log.warn("HA service running in local mode. This is only valid in local test.");
+        log.warn("This is a sample test log");
       if (HAServiceInstanceRef.get() == null) {
           String[] parts = configuration.getZkConnectionString().split(":");
           if (parts.length != 2) {
@@ -55,10 +56,11 @@ public class HighAvailabilityServicesUtil {
                   "invalid local mode connection string: " + configuration.getZkConnectionString());
           }
 
-          int apiPort = Integer.parseInt(parts[1]);
+          int apiPort = 8100;// Integer.parseInt(parts[1]);
           HAServiceInstanceRef.compareAndSet(null, new LocalHighAvailabilityServices(
               new MasterDescription(
-                  parts[0],
+                  // parts[0],
+                  "127.0.0.1",
                   "127.0.0.1",
                   apiPort,
                   apiPort,
@@ -71,6 +73,7 @@ public class HighAvailabilityServicesUtil {
     }
     else {
       if (HAServiceInstanceRef.get() == null) {
+          log.warn("Going into the other else");
           HAServiceInstanceRef.compareAndSet(null, new ZkHighAvailabilityServices(configuration));
       }
     }
@@ -83,6 +86,7 @@ public class HighAvailabilityServicesUtil {
     private final CoreConfiguration configuration;
 
     public LocalHighAvailabilityServices(MasterDescription masterDescription, CoreConfiguration configuration) {
+        log.info("------ Master monitor info: {}", masterDescription.toString());
         this.masterMonitor = new LocalMasterMonitor(masterDescription);
         this.configuration = configuration;
     }

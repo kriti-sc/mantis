@@ -367,7 +367,6 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 
     @Override
     public CompletableFuture<Ack> submitTask(ExecuteStageRequest request) {
-
         log.info("Received request {} for execution", request);
         if (currentTask != null) {
             if (currentTask.getWorkerId().equals(request.getWorkerId().getId())) {
@@ -408,12 +407,17 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
             JsonSerializer ser = new JsonSerializer();
             String executeRequest = ser.toJson(wrappedRequest.getRequest());
             String configString = ser.toJson(WorkerConfigurationUtils.toWritable(workerConfiguration));
+            log.info("----- task initializing.. {} {} {}", executeRequest, configString, this.taskFactory.toString());
             RuntimeTask task = this.taskFactory.getRuntimeTaskInstance(wrappedRequest.getRequest(), cl);
+
+            log.info("----- task initializing.. {}", task.toString());
 
             task.initialize(
                 executeRequest,
                 configString,
                 userCodeClassLoader);
+
+            log.info(" ------ Task initialized");
 
             scheduleRunAsync(() -> {
                 setCurrentTask(task);

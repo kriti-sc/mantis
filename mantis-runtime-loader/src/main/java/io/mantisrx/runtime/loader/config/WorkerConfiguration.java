@@ -120,7 +120,8 @@ public interface WorkerConfiguration extends CoreConfiguration {
     // ------------------------------------------------------------------------
     //  RPC related configurations
     // ------------------------------------------------------------------------
-    @Config({"mantis.taskexecutor.rpc.external-address", "MANTIS_TASKEXECUTOR_RPC_EXTERNAL_ADDRESS"})
+    @Config("mantis.taskexecutor.rpc.external-address")
+    // @Default("${EC2_LOCAL_IPV4}")
     @Default("localhost")
     String getExternalAddress();
 

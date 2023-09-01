@@ -17,6 +17,8 @@ apply plugin: "mantis"
 
 apply plugin: 'mantis'
 
+apply plugin: 'mantis'
+
 configurations.all {
     resolutionStrategy {
         force "com.google.guava:guava:31.1-jre"
